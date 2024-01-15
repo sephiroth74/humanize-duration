@@ -15,7 +15,7 @@ Example:
     println!("duration: {}", human);
 ```
 
-It will print: **4years 1month 27days 2h 36m 17s 301ms 21µs 123ns**
+It will print: `4years 1month 27days 2h 36m 17s 301ms 21µs 123ns`
 
 While:
 ```rust
@@ -23,10 +23,11 @@ While:
     println!("duration: {}", human2);
 ```
 
-    It will print: 4years 1month 27days
+It will print: `4years 1month 27days`
 
 
-Custom formatting is also possible. For example:
+
+**Custom** formatting is also possible. For example:
 
 ```rust
     use time::Duration as TimeDuration;
@@ -68,4 +69,4 @@ Custom formatting is also possible. For example:
     println!("human: {human}");
 ```
 
-    It will print: 1 giorno 17 ore 45 minuti 45 secondi 202 millisecondi 557 microsecondi 1 nanosecondo
+It will print: `1 giorno 17 ore 45 minuti 45 secondi 202 millisecondi 557 microsecondi 1 nanosecondo`
