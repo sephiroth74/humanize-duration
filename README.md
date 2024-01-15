@@ -1,7 +1,7 @@
 # humanize-duration
 
 ![crates.io](https://img.shields.io/crates/v/humanize-duration.svg)
-
+![example branch parameter](https://github.com/sephiroth74/humanize-duration/actions/workflows/rust.yml/badge.svg?branch=main)
 
 Convert time Duration to human-readable format with the ability to truncate the output string to a specific time
 unit. <br />
