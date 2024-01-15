@@ -1,9 +1,9 @@
 use crate::types::DurationParts;
 
 mod impls;
-mod r#macro;
-mod prelude;
-mod types;
+pub mod r#macro;
+pub mod prelude;
+pub mod types;
 
 #[derive(Copy, Clone)]
 pub(crate) struct Duration {
