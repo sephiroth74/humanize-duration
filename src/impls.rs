@@ -1,5 +1,8 @@
 use std::fmt::{Display, Formatter};
 
+#[allow(unused_imports)]
+use std::ops::Add;
+
 use crate::types::{DefaultFormatter, DurationParts};
 use crate::{Day, Duration, FormattedDuration, Hour, Micro, Millis, Minute, Month, Nano, Second, Truncate, Unit, Year};
 
