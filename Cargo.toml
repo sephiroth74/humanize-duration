@@ -1,6 +1,6 @@
 [package]
 name = "humanize-duration"
-version = "0.1.0"
+version = "0.0.2"
 edition = "2021"
 description = "Convert time Duration to human readable format"
 license = "MIT"
