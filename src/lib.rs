@@ -20,6 +20,73 @@ pub struct FormattedDuration {
 pub trait Formatter {
 	fn get(&self, truncate: Truncate) -> Box<dyn Unit>;
 	fn format(&self, f: &mut std::fmt::Formatter<'_>, parts: DurationParts, truncate: Truncate) -> core::fmt::Result;
+
+	fn format_default(&self, f: &mut std::fmt::Formatter<'_>, parts: DurationParts, truncate: Truncate) -> core::fmt::Result {
+		let ref mut started = false;
+
+		if parts.is_empty() {
+			self.get(Truncate::Second)
+				.format(f, 0, truncate == Truncate::Second, started)?;
+			return Ok(());
+		}
+
+		if parts.seconds < 0 {
+			f.write_str("-")?;
+		}
+
+		self.get(Truncate::Year)
+			.format(f, parts.years.abs() as u64, truncate == Truncate::Year, started)?;
+		if truncate == Truncate::Year {
+			return Ok(());
+		}
+
+		self.get(Truncate::Month)
+			.format(f, parts.months.abs() as u64, truncate == Truncate::Month, started)?;
+		if truncate == Truncate::Month {
+			return Ok(());
+		}
+
+		self.get(Truncate::Day)
+			.format(f, parts.days.abs() as u64, truncate == Truncate::Day, started)?;
+		if truncate == Truncate::Day {
+			return Ok(());
+		}
+
+		self.get(Truncate::Hour)
+			.format(f, parts.hours.abs() as u64, truncate == Truncate::Hour, started)?;
+		if truncate == Truncate::Hour {
+			return Ok(());
+		}
+
+		self.get(Truncate::Minute)
+			.format(f, parts.minutes.abs() as u64, truncate == Truncate::Minute, started)?;
+		if truncate == Truncate::Minute {
+			return Ok(());
+		}
+
+		self.get(Truncate::Second)
+			.format(f, parts.seconds.abs() as u64, truncate == Truncate::Second, started)?;
+		if truncate == Truncate::Second {
+			return Ok(());
+		}
+
+		self.get(Truncate::Millis)
+			.format(f, parts.millis.abs() as u64, truncate == Truncate::Millis, started)?;
+		if truncate == Truncate::Millis {
+			return Ok(());
+		}
+
+		self.get(Truncate::Micro)
+			.format(f, parts.micros.abs() as u64, truncate == Truncate::Micro, started)?;
+		if truncate == Truncate::Micro {
+			return Ok(());
+		}
+
+		self.get(Truncate::Nano)
+			.format(f, parts.nanos.abs() as u64, truncate == Truncate::Nano, started)?;
+
+		Ok(())
+	}
 }
 
 pub trait Unit {
@@ -60,8 +127,8 @@ mod tests {
 	use time::Duration as TimeDuration;
 
 	use crate::prelude::DurationExt;
-	use crate::types::DefaultFormatter;
-	use crate::{Duration, Truncate};
+	use crate::types::{DefaultFormatter, DurationParts};
+	use crate::{unit, Duration, Formatter, Truncate, Unit};
 
 	#[test]
 	fn test_nano() {
@@ -189,5 +256,53 @@ mod tests {
 		let converted: Duration = duration.into();
 		let duration2: StdDuration = converted.into();
 		assert_eq!(duration, duration2);
+	}
+
+	#[test]
+	fn test_custom_formatter() {
+		struct MyFormatter;
+
+		unit!(MyYear, " anno", " anni");
+		unit!(MyMonth, " mese", " mesi");
+		unit!(MyDay, " giorno", " giorni");
+		unit!(MyHour, " ora", " ore");
+		unit!(MyMinute, " minuto", " minuti");
+		unit!(MySecond, " secondo", " secondi");
+		unit!(MyMillis, " millisecondo", " millisecondi");
+		unit!(MyMicro, " microsecondo", " microsecondi");
+		unit!(MyNano, " nanosecondo", " nanosecondi");
+
+		impl Formatter for MyFormatter {
+			fn get(&self, truncate: Truncate) -> Box<dyn Unit> {
+				match truncate {
+					Truncate::Nano => Box::new(MyNano),
+					Truncate::Micro => Box::new(MyMicro),
+					Truncate::Millis => Box::new(MyMillis),
+					Truncate::Second => Box::new(MySecond),
+					Truncate::Minute => Box::new(MyMinute),
+					Truncate::Hour => Box::new(MyHour),
+					Truncate::Day => Box::new(MyDay),
+					Truncate::Month => Box::new(MyMonth),
+					Truncate::Year => Box::new(MyYear),
+				}
+			}
+
+			fn format(&self, f: &mut std::fmt::Formatter<'_>, parts: DurationParts, truncate: Truncate) -> std::fmt::Result {
+				self.format_default(f, parts, truncate)
+			}
+		}
+
+		let duration = TimeDuration::nanoseconds(150_345_202_557_001);
+		let human_default = duration.human(Truncate::Nano);
+		let human = duration.human_with_format(Truncate::Nano, MyFormatter);
+
+		println!("human default: {human_default}");
+		println!("human: {human}");
+
+		assert_eq!("1day 17h 45m 45s 202ms 557µs 1ns", human_default.to_string());
+		assert_eq!(
+			"1 giorno 17 ore 45 minuti 45 secondi 202 millisecondi 557 microsecondi 1 nanosecondo",
+			human.to_string()
+		);
 	}
 }
