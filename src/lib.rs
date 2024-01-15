@@ -1,7 +1,12 @@
+#![doc = include_str!("../README.md")]
+
 use crate::types::DurationParts;
 
 mod impls;
-pub mod r#macro;
+
+#[macro_use]
+pub mod macros;
+
 pub mod prelude;
 pub mod types;
 
@@ -18,9 +23,13 @@ pub struct FormattedDuration {
 }
 
 pub trait Formatter {
+	/// Given the truncate type, it should return the corresponding implemented Unit
 	fn get(&self, truncate: Truncate) -> Box<dyn Unit>;
+
+	// This method is responsible to format the duration parts into the final string
 	fn format(&self, f: &mut std::fmt::Formatter<'_>, parts: DurationParts, truncate: Truncate) -> core::fmt::Result;
 
+	/// default format implementation
 	fn format_default(&self, f: &mut std::fmt::Formatter<'_>, parts: DurationParts, truncate: Truncate) -> core::fmt::Result {
 		let ref mut started = false;
 
@@ -89,6 +98,8 @@ pub trait Formatter {
 	}
 }
 
+/// Duration part formatter Unit.
+/// Each unit is responsible to format a specific part of the duration
 pub trait Unit {
 	fn one(&self) -> &'static str;
 	fn many(&self) -> &'static str;

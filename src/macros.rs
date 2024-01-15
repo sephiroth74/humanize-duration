@@ -2,7 +2,7 @@
 macro_rules! unit {
 	($unit_name:tt, $one:expr) => {
 		pub struct $unit_name;
-		impl Unit for $unit_name {
+		impl $crate::Unit for $unit_name {
 			fn one(&self) -> &'static str {
 				$one
 			}
@@ -31,7 +31,7 @@ macro_rules! unit {
 	};
 	($unit_name:tt, $one:expr, $many:expr) => {
 		pub struct $unit_name;
-		impl Unit for $unit_name {
+		impl $crate::Unit for $unit_name {
 			fn one(&self) -> &'static str {
 				$one
 			}

@@ -10,17 +10,28 @@ It supports `time::Duration`, `core::time::Duration` and `chrono::Duration` (usi
 Example:
 
 ```rust
-    let duration = time::Duration::nanoseconds(131_200_001_301_021_123);
-    let human = duration.human(Truncate::Nano);
-    println!("duration: {}", human);
+    use humanize_duration::Truncate;
+    use humanize_duration::prelude::DurationExt;
+
+    pub fn main() {
+        let duration = time::Duration::nanoseconds(131_200_001_301_021_123);
+        let human = duration.human(Truncate::Nano);
+        println!("duration: {}", human);
+    }
 ```
 
 It will print: `4years 1month 27days 2h 36m 17s 301ms 21µs 123ns`
 
 While:
 ```rust
-    let human2 = duration.human(Truncate::Day);
-    println!("duration: {}", human2);
+    use humanize_duration::Truncate;
+    use humanize_duration::prelude::DurationExt;
+    
+    pub fn main() {
+        let duration = time::Duration::nanoseconds(131_200_001_301_021_123);
+        let human2 = duration.human(Truncate::Day);
+        println!("duration: {}", human2);
+    }
 ```
 
 It will print: `4years 1month 27days`
@@ -30,6 +41,10 @@ It will print: `4years 1month 27days`
 **Custom** formatting is also possible. For example:
 
 ```rust
+    use humanize_duration::{*};
+    use humanize_duration::prelude::DurationExt;
+    use humanize_duration::types::DurationParts;
+
     use time::Duration as TimeDuration;
     struct MyFormatter;
 
@@ -63,10 +78,11 @@ It will print: `4years 1month 27days`
         }
     }
 
-    let duration = TimeDuration::nanoseconds(150_345_202_557_001);
-    let human = duration.human_with_format(Truncate::Nano, MyFormatter);
-
-    println!("human: {human}");
+    pub fn main() {
+        let duration = TimeDuration::nanoseconds(150_345_202_557_001);
+        let human = duration.human_with_format(Truncate::Nano, MyFormatter);
+        println!("human: {human}");
+    }
 ```
 
 It will print: `1 giorno 17 ore 45 minuti 45 secondi 202 millisecondi 557 microsecondi 1 nanosecondo`

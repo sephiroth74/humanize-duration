@@ -1,7 +1,7 @@
 use crate::types::{DefaultFormatter, DurationParts};
 use crate::{Duration, FormattedDuration, Formatter, Truncate};
 
-static SECONDS_IN_YEAR: i64 = 31_556_952; // 31_557_600
+pub static SECONDS_IN_YEAR: i64 = 31_556_952; // 31_557_600
 
 pub trait DurationExt {
 	fn human(&self, truncate: Truncate) -> FormattedDuration;
@@ -59,7 +59,7 @@ impl From<Duration> for DurationParts {
 		let original_seconds = value.secs;
 		let original_nanos = value.nanos;
 
-		let years = original_seconds / SECONDS_IN_YEAR; // 365.25d
+		let years = original_seconds / SECONDS_IN_YEAR;
 		let ydays = original_seconds % SECONDS_IN_YEAR;
 		let months = ydays / 2_630_016; // 30.44d
 		let mdays = ydays % 2_630_016;
