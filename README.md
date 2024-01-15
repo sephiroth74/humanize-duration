@@ -15,7 +15,7 @@ Example:
     println!("duration: {}", human);
 ```
 
-    It will print: 4years 1month 27days 2h 36m 17s 301ms 21µs 123ns
+It will print: **4years 1month 27days 2h 36m 17s 301ms 21µs 123ns**
 
 While:
 ```rust
