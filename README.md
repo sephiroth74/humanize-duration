@@ -1,5 +1,8 @@
 # humanize-duration
 
+![crates.io](https://img.shields.io/crates/v/humanize-duration.svg)
+
+
 Convert time Duration to human-readable format with the ability to truncate the output string to a specific time
 unit. <br />
 It supports `time::Duration`, `core::time::Duration` and `chrono::Duration` (using the chrono feature)
