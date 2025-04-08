@@ -1,6 +1,6 @@
 [package]
 name = "humanize-duration"
-version = "0.0.6"
+version = "0.0.7"
 edition = "2021"
 description = "Convert time Duration to human readable format"
 license = "MIT"
@@ -15,5 +15,5 @@ default = []
 chrono = ["dep:chrono"]
 
 [dependencies]
-time = "0.3.31"
-chrono = { version = "0.4.31", optional = true }
+time = "0.3.41"
+chrono = { version = "0.4.40", optional = true }
